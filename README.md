@@ -2,19 +2,21 @@
 
 <p align="center">Write an ATS-friendly Resume in Markdown. Available for anyone, Optimized for Dev.</p>
 
-<p align="center"><a href="https://www.junian.dev/markdown-resume/"><strong>Start Writing Now</strong></a>!</p>
+
 
 <img align="center" src="https://raw.githubusercontent.com/junian/markdown-resume/assets/img/markdown-resume-screenshot-00.jpg"/>
 
 ## About
 
-A fork of "Oh My CV!". You can visit the original work [here](https://ohmycv.app/).
+A fork of "Markdown-Resume". You can visit the original work [here](https://github.com/junian/markdown-resume).
+Markdown-Resume is in turn a fork of "Oh My CV!". You can visit the original work [here](https://ohmycv.app).
 
-Changes I made from the original work:
-- Default template is now as close as possible with [CareerCup's](https://www.careercup.com/resume) resume template.
-- Default color is all Black.
-- Added Web-safe fonts for easier ATS parsing.
-- And many more ...
+
+
+Changes I made MArkdown Resume Fork:
+- Dockerfile
+
+## **The Rest Below is from Markdown Resume** 
 
 ## Notice
 
@@ -74,6 +76,7 @@ pnpm build
 
 - The original work: [Renovamen/oh-my-cv](https://github.com/Renovamen/oh-my-cv)
 - [billryan/resume](https://github.com/billryan/resume)
+- [junian/markdown-resume](https://github.com/junian/markdown-resume)
 
 ## License
 
