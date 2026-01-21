@@ -13,7 +13,7 @@ Markdown-Resume is in turn a fork of "Oh My CV!". You can visit the original wor
 
 
 
-Changes I made MArkdown Resume Fork:
+Changes I made Markdown Resume Fork:
 - Dockerfile
 
 ## **The Rest Below is from Markdown Resume** 
