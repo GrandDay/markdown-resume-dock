@@ -67,6 +67,58 @@ Highly recommend using Chromium-based browsers, e.g., [Chrome](https://www.googl
   - No user tracking, no ads
 - Dark mode
 
+## Reverse Proxy / Self-Hosting
+
+This app is designed to work behind any HTTP reverse proxy (Traefik, Nginx Proxy Manager, Caddy, HAProxy, etc.).
+
+**Container Design:**
+
+- Listens on port 80 (HTTP only—reverse proxy handles HTTPS termination)
+- Serves static SPA files with service worker
+- Trusts `X-Forwarded-For` and `X-Forwarded-Proto` headers from proxies
+- No forced redirects—safe for any deployment architecture
+
+**How to Deploy:**
+
+1. Configure your reverse proxy to:
+   - Terminate HTTPS at the proxy layer
+   - Forward HTTP traffic to container port 80
+   - Pass `X-Forwarded-Proto: https` header (standard for all major proxies)
+2. Set environment variables if using a custom domain or subpath:
+   - `NUXT_PUBLIC_SITE_URL=https://yourdomain.com`
+   - `NUXT_PUBLIC_BASE_URL=/` (or `/resume/` for subpaths)
+
+**Example with Dokploy:**
+
+1. Create a new application and select this GitHub repo
+2. Choose **Dockerfile** as the build method
+3. In the domain settings, enable HTTPS (Dokploy's Traefik will handle it automatically)
+4. Deploy—no additional configuration needed
+
+**Example with Docker Compose + Traefik:**
+
+```yaml
+services:
+  markdown-resume:
+    image: your-registry/markdown-resume:latest
+    environment:
+      NUXT_PUBLIC_SITE_URL: https://resume.example.com
+      NUXT_PUBLIC_BASE_URL: /
+    networks:
+      - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.resume.rule=Host(`resume.example.com`)
+      - traefik.http.routers.resume.entrypoints=websecure
+      - traefik.http.routers.resume.tls.certresolver=letsencrypt
+      - traefik.http.services.resume.loadbalancer.server.port=80
+
+networks:
+  traefik:
+    external: true
+```
+
+
 ## Development
 
 It's built on [Nuxt 3](https://nuxt.com), with the power of [Vue 3](https://github.com/vuejs/vue-next), [Vite](https://github.com/vitejs/vite), [Zag](https://zagjs.com/), and [UnoCSS](https://github.com/antfu/unocss).

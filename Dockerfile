@@ -52,13 +52,19 @@ FROM nginx:alpine
 # Copy the static assets
 COPY --from=builder /app/site/.output/public /usr/share/nginx/html
 
-# SPA fallback and caching
+# SPA fallback and caching with reverse proxy support
 RUN cat <<'EOF' > /etc/nginx/conf.d/default.conf
 server {
 	listen 80;
 	server_name _;
 	root /usr/share/nginx/html;
 	index index.html;
+
+	# Trust headers from reverse proxy (Traefik, Nginx Proxy Manager, Caddy, etc.)
+	real_ip_header X-Forwarded-For;
+	set_real_ip_from 10.0.0.0/8;
+	set_real_ip_from 172.16.0.0/12;
+	set_real_ip_from 192.168.0.0/16;
 
 	location / {
 		try_files $uri $uri/ /index.html;
