@@ -51,7 +51,13 @@ const api = computed(() => splitter.connect(state.value, send, normalizeProps));
 
 // Fetch resume data
 const route = useRoute();
-(async () => await switchResume(route.params.id as string))();
+(async () => {
+  const success = await switchResume(route.params.id as string);
+  if (!success) {
+    // Resume not found in storage or Pinia state, redirect to home
+    await navigateTo(localePath('/'));
+  }
+})();
 
 // Toogle toolbar
 const { width } = useWindowSize();

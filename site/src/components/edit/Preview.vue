@@ -30,6 +30,7 @@
 
 <script lang="ts" setup>
 import { debounce } from "ts-debounce";
+import { useElementSize } from "@vueuse/core";
 import Zoom from "@renovamen/vue-zoom";
 
 const scale = ref(1);

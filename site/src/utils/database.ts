@@ -183,6 +183,14 @@ export const switchResume = async (id: string) => {
     return true;
   }
 
+  // Fallback: check if resume is already in Pinia state (from current session)
+  // This handles SSR hydration timing where localStorage may not be immediately available
+  const dataStore = useDataStore();
+  if (dataStore.resume && dataStore.resume.id === id) {
+    toast.switch(dataStore.resume.name);
+    return true;
+  }
+
   return false;
 };
 
