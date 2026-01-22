@@ -20,10 +20,6 @@ This edition is tuned for self-hosting with Docker (and Dokploy) instead of GitH
 - ✅ Dokploy-friendly deploy flow
 - ✅ README docs for self-hosting
 
-Changes I made Markdown Resume Fork:
-
-- Dockerfile
-
 ## Quick Start (Docker)
 
 The image builds to a static site and serves with Nginx. Defaults work with **zero config**.
