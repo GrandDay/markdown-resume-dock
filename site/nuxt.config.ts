@@ -1,5 +1,22 @@
-import { pwa } from "./configs/pwa";
+import { defineNuxtConfig } from "nuxt/config";
+import { createPwaConfig } from "./configs/pwa";
 import { i18n } from "./configs/i18n";
+
+const normalizeBase = (value?: string): string => {
+  if (!value) return "/";
+  const prefixed = value[0] === "/" ? value : `/${value}`;
+  const hasTrailingSlash = prefixed[prefixed.length - 1] === "/" ? prefixed : `${prefixed}/`;
+  return hasTrailingSlash;
+};
+
+const runtimeEnv = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env ?? {};
+
+const rawBaseURL = runtimeEnv.NUXT_PUBLIC_BASE_URL || "/";
+const baseURL = normalizeBase(rawBaseURL);
+const siteUrl = runtimeEnv.NUXT_PUBLIC_SITE_URL || "http://localhost:3000";
+const canonicalUrl = `${siteUrl.replace(/\/$/, "")}${baseURL}`;
+const siteName = runtimeEnv.NUXT_PUBLIC_SITE_NAME || "Markdown Resume";
+const googleFontsKey = runtimeEnv.NUXT_PUBLIC_GOOGLE_FONTS_KEY || "";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -32,7 +49,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      googleFontsKey: ""
+      googleFontsKey
     }
   },
 
@@ -42,12 +59,8 @@ export default defineNuxtConfig({
   },
 
   app: {
-    // If host it on https://example.com
-    //    baseURL: '/'
-    // Else if host it on https://example.com/resume
-    //    baseURL: '/resume/'
-    baseURL: '/markdown-resume/', // baseURL: '/<repository>/'
-    buildAssetsDir: 'assets', // don't use "_" at the begining of the folder name to avoids
+    baseURL,
+    buildAssetsDir: "assets", // don't use "_" at the begining of the folder name to avoids
     head: {
       viewport: "width=device-width,initial-scale=1",
       link: [
@@ -59,16 +72,17 @@ export default defineNuxtConfig({
         { name: "application-name", content: "Markdown Resume" },
         { name: "apple-mobile-web-app-title", content: "Markdown Resume" },
         { name: "msapplication-TileColor", content: "#fff" },
-        { property: "og:url", content: "https://www.junian.dev/markdown-resume/" },
+        { property: "og:url", content: canonicalUrl },
         { property: "og:type", content: "website" }
       ]
     }
   },
 
   site: {
-    url: "https://www.junian.dev/markdown-resume/"
+    url: siteUrl,
+    name: siteName,
   },
 
-  pwa,
+  pwa: createPwaConfig(baseURL),
 
 });

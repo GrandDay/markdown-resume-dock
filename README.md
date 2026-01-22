@@ -16,7 +16,26 @@ Markdown-Resume is in turn a fork of "Oh My CV!". You can visit the original wor
 Changes I made Markdown Resume Fork:
 - Dockerfile
 
-## **The Rest Below is from Markdown Resume** 
+## Deployment (Docker / Dokploy)
+
+The image builds to a static site and serves with Nginx. Everything works with **zero config**; use build args only if you need custom domains or subpaths.
+
+```bash
+# defaults: base=/ , site url=http://localhost:3000 , name="Markdown Resume"
+docker build -t markdown-resume .
+
+# optional: set your domain or subpath
+docker build -t markdown-resume \
+  --build-arg NUXT_PUBLIC_SITE_URL=https://resume.example.com \
+  --build-arg NUXT_PUBLIC_BASE_URL=/ \
+  --build-arg NUXT_PUBLIC_SITE_NAME="Your Name" .
+
+docker run -d -p 80:80 markdown-resume
+```
+
+For Dokploy, point to the repo, choose **Dockerfile** build, and deploy. Leave build args empty for a root-domain deploy; set `NUXT_PUBLIC_BASE_URL=/resume/` only if you serve under a sub-path.
+
+## **The Rest Below is from Markdown Resume**
 
 ## Notice
 
@@ -38,7 +57,7 @@ Highly recommend using Chromium-based browsers, e.g., [Chrome](https://www.googl
 - Customize CSS
 - Manage multiple resumes
 - Your data in your hands:
-  - Data are saved locally within your browser, see [here](https://localforage.github.io/localForage/) for details
+  - Data are saved locally within your browser, see the [localForage docs](https://localforage.github.io/localForage/) for details
   - Open-source static website hosted on [Github Pages](https://pages.github.com/), which doesn't (have the ability to) collect your data
   - No user tracking, no ads
 - Dark mode
@@ -59,9 +78,9 @@ Build some [packages](packages):
 pnpm build:pkg
 ```
 
-To enable picking fonts from [Google Fonts](https://fonts.google.com/), you will need to generate a [Google Fonts Developer API Key](https://developers.google.com/fonts/docs/developer_api#APIKey). Then, create a `.env` file in [`site`](site/) folder and put:
+To enable picking fonts from [Google Fonts](https://fonts.google.com/) (optional), generate a [Google Fonts Developer API Key](https://developers.google.com/fonts/docs/developer_api#APIKey). Then, copy [`site/.env.example`](site/.env.example) to `site/.env` and set:
 
-```
+```env
 NUXT_PUBLIC_GOOGLE_FONTS_KEY="YOUR_API_KEY"
 ```
 
