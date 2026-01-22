@@ -1,4 +1,6 @@
-# Markdown Resume
+# Markdown Resume Dock
+
+[![Deploy to Dokploy](https://img.shields.io/badge/Deploy%20to-Dokploy-blue)](docs/DOKPLOY.md)
 
 Write an ATS-friendly Resume in Markdown. Available for anyone, Optimized for Dev.
 
@@ -8,8 +10,6 @@ Write an ATS-friendly Resume in Markdown. Available for anyone, Optimized for De
 
 A fork of "Markdown-Resume". See the original work: [junian/markdown-resume](https://github.com/junian/markdown-resume).
 Markdown-Resume is in turn a fork of "Oh My CV!": [ohmycv.app](https://ohmycv.app).
-
-
 
 ## Why This Fork?
 
@@ -38,7 +38,58 @@ docker build -t markdown-resume \
 
 ## Dokploy Deployment
 
-Point Dokploy to the repo, choose **Dockerfile** build, and deploy. Leave build args empty for a root-domain deploy; set `NUXT_PUBLIC_BASE_URL=/resume/` only if you serve under a sub-path. Refer to [.env.example](.env.example) for optional public settings.
+### Quick Setup
+
+1. In Dokploy UI: **Applications** → **New Application**
+2. **Provider**: GitHub → Select your fork/repo
+3. **Branch**: `master`
+4. **Build Type**: Dockerfile
+5. **Dockerfile path**: `./Dockerfile`
+
+### Configuration
+
+#### Ports
+
+- **Do NOT add any port mappings** — Traefik routes internally via Docker overlay network
+
+#### Environment Variables (Optional)
+
+```env
+NUXT_PUBLIC_SITE_URL=https://yourdomain.com
+NUXT_PUBLIC_BASE_URL=/
+NUXT_PUBLIC_SITE_NAME=Markdown Resume
+```
+
+#### Domain Setup
+
+1. Go to **Domains** tab → Add your domain
+2. Enable **HTTPS** (Let's Encrypt)
+3. **Critical**: In **Advanced** Traefik config, update the service URL:
+
+```yaml
+http:
+  services:
+    your-service-name:
+      loadBalancer:
+        servers:
+          - url: http://tasks.your-service-name:80
+```
+
+Note the `tasks.` prefix—required for Docker Swarm service discovery when Traefik uses `dnsrr` endpoint mode.
+
+### Troubleshooting
+
+**504 Gateway Timeout:**
+
+- Ensure no published ports configured (Traefik routes internally)
+- Verify Traefik config uses `tasks.` prefix in service URL
+- Check both services on `dokploy-network`: `docker service inspect your-service-name --format '{{json .Spec.TaskTemplate.Networks}}'`
+
+**DNS Resolution Issues:**
+
+- Use `tasks.` DNS prefix in Traefik config (see Domain Setup above)
+
+📖 **[Full Deployment Guide](docs/DOKPLOY.md)** with step-by-step instructions and troubleshooting.
 
 ## **The Rest Below is from Markdown Resume**
 
