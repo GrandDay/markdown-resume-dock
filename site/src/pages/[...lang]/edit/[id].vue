@@ -37,6 +37,7 @@
 <script lang="ts" setup>
 import * as splitter from "@zag-js/splitter";
 import { normalizeProps, useMachine } from "@zag-js/vue";
+import { useWindowSize } from "@vueuse/core";
 
 // Horizontal splitpane
 const [state, send] = useMachine(

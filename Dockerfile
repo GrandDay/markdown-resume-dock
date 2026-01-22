@@ -52,6 +52,30 @@ FROM nginx:alpine
 # Copy the static assets
 COPY --from=builder /app/site/.output/public /usr/share/nginx/html
 
+# SPA fallback and caching
+RUN cat <<'EOF' > /etc/nginx/conf.d/default.conf
+server {
+	listen 80;
+	server_name _;
+	root /usr/share/nginx/html;
+	index index.html;
+
+	location / {
+		try_files $uri $uri/ /index.html;
+	}
+
+	location = /sw.js {
+		add_header Cache-Control "no-cache";
+		try_files $uri $uri/ /sw.js;
+	}
+
+	location ~* \.(js|css|png|svg|ico|jpg|jpeg|gif|woff2?|ttf|otf|eot)$ {
+		add_header Cache-Control "public, max-age=31536000, immutable";
+		try_files $uri =404;
+	}
+}
+EOF
+
 # Expose port 80
 EXPOSE 80
 
