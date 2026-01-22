@@ -1,39 +1,48 @@
-<h1 align="center">Markdown Resume</h1>
+# Markdown Resume
 
-<p align="center">Write an ATS-friendly Resume in Markdown. Available for anyone, Optimized for Dev.</p>
+Write an ATS-friendly Resume in Markdown. Available for anyone, Optimized for Dev.
 
-
-
-<img align="center" src="https://raw.githubusercontent.com/junian/markdown-resume/assets/img/markdown-resume-screenshot-00.jpg"/>
+![Markdown Resume screenshot](https://raw.githubusercontent.com/junian/markdown-resume/assets/img/markdown-resume-screenshot-00.jpg)
 
 ## About
 
-A fork of "Markdown-Resume". You can visit the original work [here](https://github.com/junian/markdown-resume).
-Markdown-Resume is in turn a fork of "Oh My CV!". You can visit the original work [here](https://ohmycv.app).
+A fork of "Markdown-Resume". See the original work: [junian/markdown-resume](https://github.com/junian/markdown-resume).
+Markdown-Resume is in turn a fork of "Oh My CV!": [ohmycv.app](https://ohmycv.app).
 
 
+
+## Why This Fork?
+
+This edition is tuned for self-hosting with Docker (and Dokploy) instead of GitHub Pages. It adds:
+
+- ✅ Dockerfile + Nginx SPA routing (client routes work on refresh)
+- ✅ Optional env vars for custom domains / subpaths
+- ✅ Dokploy-friendly deploy flow
+- ✅ README docs for self-hosting
 
 Changes I made Markdown Resume Fork:
+
 - Dockerfile
 
-## Deployment (Docker / Dokploy)
+## Quick Start (Docker)
 
-The image builds to a static site and serves with Nginx. Everything works with **zero config**; use build args only if you need custom domains or subpaths.
+The image builds to a static site and serves with Nginx. Defaults work with **zero config**.
 
 ```bash
 # defaults: base=/ , site url=http://localhost:3000 , name="Markdown Resume"
 docker build -t markdown-resume .
+docker run -d -p 80:80 markdown-resume
 
 # optional: set your domain or subpath
 docker build -t markdown-resume \
   --build-arg NUXT_PUBLIC_SITE_URL=https://resume.example.com \
   --build-arg NUXT_PUBLIC_BASE_URL=/ \
   --build-arg NUXT_PUBLIC_SITE_NAME="Your Name" .
-
-docker run -d -p 80:80 markdown-resume
 ```
 
-For Dokploy, point to the repo, choose **Dockerfile** build, and deploy. Leave build args empty for a root-domain deploy; set `NUXT_PUBLIC_BASE_URL=/resume/` only if you serve under a sub-path.
+## Dokploy Deployment
+
+Point Dokploy to the repo, choose **Dockerfile** build, and deploy. Leave build args empty for a root-domain deploy; set `NUXT_PUBLIC_BASE_URL=/resume/` only if you serve under a sub-path. Refer to [.env.example](.env.example) for optional public settings.
 
 ## **The Rest Below is from Markdown Resume**
 
@@ -90,6 +99,13 @@ Start developing / building the site:
 pnpm dev
 pnpm build
 ```
+
+## Support
+
+If this project saved you time, consider supporting it:
+
+- [Ko-fi](https://ko-fi.com/grandday)
+- GitHub Sponsors (button on the repo)
 
 ## Credits
 
