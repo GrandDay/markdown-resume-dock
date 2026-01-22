@@ -29,9 +29,9 @@ This guide covers deploying Markdown Resume to Dokploy with Docker Swarm and Tra
 
 If you accidentally added a port (like `80:80`):
 
-1. Go to **Ports** tab
-2. Delete the entry
-3. Click **Redeploy**
+1. Go to **Advanced** tab
+2. Delete the **Ports** entry
+3. Click **Stop**, then **Deploy** again
 
 #### Network Architecture
 
